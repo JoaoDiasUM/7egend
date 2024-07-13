@@ -85,4 +85,9 @@ dependencies {
 
     kapt(libs.hilt.android.compiler)
 
+    // Room
+    implementation(libs.androidx.room.ktx)
+    // To use Kotlin annotation processing tool (kapt)
+    kapt(libs.androidx.room.compiler)
+
 }
