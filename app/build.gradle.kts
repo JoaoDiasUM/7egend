@@ -92,5 +92,6 @@ dependencies {
 
 
     implementation("io.coil-kt:coil-compose:2.6.0")
+    implementation("androidx.lifecycle:lifecycle-runtime-compose:2.6.0")
 
 }

@@ -1,15 +1,17 @@
 package com.example.myapplication.presentation.messaging
 
-import androidx.compose.runtime.State
-import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.myapplication.common.Constants.MY_ID
 import com.example.myapplication.common.Resource
 import com.example.myapplication.data.remote.dto.Message
 import com.example.myapplication.domain.usecase.GetMessagingHistory
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.update
 import javax.inject.Inject
 
 @HiltViewModel
@@ -17,8 +19,8 @@ class MessagingViewModel @Inject constructor(
     private val getMessagingHistory: GetMessagingHistory,
 ) : ViewModel() {
 
-    private val _state = mutableStateOf(MessagingScreenState())
-    val state: State<MessagingScreenState> = _state
+    private val _state = MutableStateFlow(MessagingScreenState())
+    val state: StateFlow<MessagingScreenState> = _state
 
     init {
         getMessagesHistory()
@@ -26,23 +28,36 @@ class MessagingViewModel @Inject constructor(
 
     private fun getMessagesHistory() {
         getMessagingHistory.invoke().onEach { result ->
-            when (result) {
-                is Resource.Error ->
-                    _state.value = MessagingScreenState(
-                        error = result.message ?: "An unexpected happened"
-                    )
+            _state.update {
+                when (result) {
+                    is Resource.Error ->
+                        it.copy(
+                            error = result.message ?: "An unexpected error occurred",
+                            isLoading = false
+                        )
 
-                is Resource.Loading -> _state.value = MessagingScreenState(isLoading = true)
-                is Resource.Success -> _state.value = MessagingScreenState(
-                    messages = result.data?.messages,
-                    users = result.data?.users
-                )
+                    is Resource.Loading -> it.copy(isLoading = true)
+                    is Resource.Success -> it.copy(
+                        messages = result.data?.messages,
+                        users = result.data?.users,
+                        isLoading = false
+                    )
+                }
             }
         }.launchIn(viewModelScope)
     }
 
-    fun getMessagesHistoryByUser(userId: Int): MutableList<Message> {
-        val myMessages = state.value.messages?.filter { it.userId == 1 }
+
+    fun updateCurrentTextMessageValue(message: String) {
+        _state.update {
+           it.copy(
+               currentTextMessage = message
+           )
+        }
+    }
+
+    fun getMessagesHistoryByUser(userId: Int) {
+        val myMessages = state.value.messages?.filter { it.userId == MY_ID }
         val userMessages = state.value.messages?.filter { it.userId == userId }
 
         val combinedMessages = mutableListOf<Message>()
@@ -50,6 +65,10 @@ class MessagingViewModel @Inject constructor(
         combinedMessages.addAll(userMessages ?: emptyList())
         combinedMessages.sortByDescending { it.id }
 
-        return combinedMessages
+        _state.update {
+            it.copy(
+                messagesHistory = combinedMessages
+            )
+        }
     }
 }

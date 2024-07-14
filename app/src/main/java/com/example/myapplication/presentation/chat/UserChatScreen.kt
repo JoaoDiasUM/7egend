@@ -16,6 +16,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.myapplication.presentation.components.UserMessageItem
 import com.example.myapplication.presentation.messaging.MessagingViewModel
 
@@ -24,37 +25,45 @@ fun UserChatScreen(
     userId: Int,
     viewModel: MessagingViewModel = hiltViewModel(),
 ) {
-    val messages = viewModel.getMessagesHistoryByUser(userId)
+    val state = viewModel.state.collectAsStateWithLifecycle()
 
-    Box(modifier = Modifier
-        .fillMaxSize()
-        .padding(20.dp)) {
-        Column {
-            LazyColumn(
-                modifier = Modifier
-                    .weight(0.7f),
-                verticalArrangement = Arrangement.spacedBy(8.dp),
-                userScrollEnabled = true
-            ) {
-                messages.forEach { message ->
-                    item {
-                        UserMessageItem(message = message)
+    viewModel.getMessagesHistoryByUser(userId)
+
+    if (state.value.messages?.isNotEmpty() == true) {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(20.dp, 50.dp, 20.dp, 50.dp)
+        ) {
+            Column {
+                LazyColumn(
+                    modifier = Modifier
+                        .weight(0.7f),
+                    verticalArrangement = Arrangement.spacedBy(8.dp),
+                    userScrollEnabled = true
+                ) {
+                    state.value.messagesHistory?.forEach { message ->
+                        item {
+                            UserMessageItem(message = message)
+                        }
                     }
                 }
-            }
 
-            OutlinedTextField(
-                modifier = Modifier.fillMaxWidth(),
-                leadingIcon = {
-                    Icon(
-                        imageVector = Icons.Default.Send,
-                        contentDescription = null
-                    )
-                },
-                value = "",
-                label = { Text("Tap Icon to send text") },
-                onValueChange = {}
-            )
+                OutlinedTextField(
+                    modifier = Modifier.fillMaxWidth(),
+                    leadingIcon = {
+                        Icon(
+                            imageVector = Icons.Default.Send,
+                            contentDescription = null
+                        )
+                    },
+                    value = viewModel.state.value.currentTextMessage ?: "",
+                    label = { Text("Tap Icon to send text") },
+                    onValueChange = {
+                        viewModel.updateCurrentTextMessageValue(it)
+                    }
+                )
+            }
         }
     }
 }
