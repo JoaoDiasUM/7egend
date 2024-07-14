@@ -1,8 +1,8 @@
 package com.example.myapplication.domain.repository
 
-import com.example.myapplication.data.remote.dto.Message
+import com.example.myapplication.data.remote.dto.MessagingHistoryDto
 
 interface MessagingRepository {
 
-    suspend fun getMessages(): List<Message>
+    suspend fun getMessages(): MessagingHistoryDto
 }

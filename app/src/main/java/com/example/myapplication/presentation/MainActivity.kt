@@ -11,10 +11,12 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import androidx.room.Room
 import com.example.myapplication.data.room.database.AttachmentDatabase
 import com.example.myapplication.data.room.database.MessageDatabase
 import com.example.myapplication.data.room.database.UserDatabase
+import com.example.myapplication.presentation.chat.UserChatScreen
 import com.example.myapplication.presentation.messaging.MessagingScreen
 import com.example.myapplication.presentation.ui.theme.MessagingAppTheme
 import dagger.hilt.android.AndroidEntryPoint
@@ -52,7 +54,15 @@ class MainActivity : ComponentActivity() {
                         composable(
                             route = Screen.MessagingScreen.route
                         ) {
-                            MessagingScreen()
+                            MessagingScreen(navController)
+                        }
+
+                        composable(
+                            route = Screen.UserChatScreen.route,
+                            arguments = listOf(navArgument("userId") { defaultValue = "user1234" })
+                        ) { backStackEntry ->
+                            backStackEntry.arguments?.getString("userId", "user1234")?.toInt()
+                                ?.let { UserChatScreen(it) }
                         }
                     }
                 }

@@ -2,6 +2,7 @@ package com.example.myapplication.domain.usecase
 
 import com.example.myapplication.common.Resource
 import com.example.myapplication.data.remote.dto.Message
+import com.example.myapplication.data.remote.dto.MessagingHistoryDto
 import com.example.myapplication.domain.repository.MessagingRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -13,7 +14,7 @@ class GetMessagingHistory @Inject constructor(
     private val messagingRepository: MessagingRepository
 ) {
 
-    operator fun invoke(): Flow<Resource<List<Message>>> = flow {
+    operator fun invoke(): Flow<Resource<MessagingHistoryDto>> = flow {
         try {
             emit(Resource.Loading())
             val messages = messagingRepository.getMessages()

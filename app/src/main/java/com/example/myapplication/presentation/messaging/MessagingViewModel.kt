@@ -5,6 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.myapplication.common.Resource
+import com.example.myapplication.data.remote.dto.Message
 import com.example.myapplication.domain.usecase.GetMessagingHistory
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
@@ -32,8 +33,23 @@ class MessagingViewModel @Inject constructor(
                     )
 
                 is Resource.Loading -> _state.value = MessagingScreenState(isLoading = true)
-                is Resource.Success -> _state.value = MessagingScreenState(messages = result.data)
+                is Resource.Success -> _state.value = MessagingScreenState(
+                    messages = result.data?.messages,
+                    users = result.data?.users
+                )
             }
         }.launchIn(viewModelScope)
+    }
+
+    fun getMessagesHistoryByUser(userId: Int): MutableList<Message> {
+        val myMessages = state.value.messages?.filter { it.userId == 1 }
+        val userMessages = state.value.messages?.filter { it.userId == userId }
+
+        val combinedMessages = mutableListOf<Message>()
+        combinedMessages.addAll(myMessages ?: emptyList())
+        combinedMessages.addAll(userMessages ?: emptyList())
+        combinedMessages.sortByDescending { it.id }
+
+        return combinedMessages
     }
 }

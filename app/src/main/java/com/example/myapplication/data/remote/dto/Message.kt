@@ -6,8 +6,11 @@ import androidx.room.PrimaryKey
 
 @Entity(tableName = "message")
 data class Message(
-    val attachments: List<Attachment>,
+    val attachments: List<Attachment>?,
     val content: String,
     @PrimaryKey val id: Int,
     val userId: Int
-)
+) {
+    val isFromMe: Boolean
+        get() = userId == 2
+}
