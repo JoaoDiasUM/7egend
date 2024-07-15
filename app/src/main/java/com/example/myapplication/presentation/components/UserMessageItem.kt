@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -90,5 +91,10 @@ fun UserMessageItem(message: Message, viewModel: MessagingViewModel) {
         }
     }
 
-    viewModel.state.value.popupUrl?.let { PopupBox(it, showPopup = showPopup, onClickOutside = {showPopup = false}) }
+    viewModel.state.collectAsState().value.popupUrl?.let {
+        PopupBox(
+            it,
+            showPopup = showPopup,
+            onClickOutside = { showPopup = false })
+    }
 }

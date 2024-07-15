@@ -1,23 +1,27 @@
 package com.example.myapplication.presentation.messaging
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.myapplication.common.Constants.MY_ID
 import com.example.myapplication.common.Resource
 import com.example.myapplication.data.remote.dto.Message
+import com.example.myapplication.data.remote.dto.User
+import com.example.myapplication.domain.repository.DatabasesRepository
 import com.example.myapplication.domain.usecase.GetMessagingHistory
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class MessagingViewModel @Inject constructor(
     private val getMessagingHistory: GetMessagingHistory,
+    private val databasesRepository: DatabasesRepository,
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(MessagingScreenState())
@@ -38,31 +42,55 @@ class MessagingViewModel @Inject constructor(
                         )
 
                     is Resource.Loading -> it.copy(isLoading = true)
-                    is Resource.Success -> it.copy(
-                        messages = result.data?.messages,
-                        users = result.data?.users,
-                        isLoading = false
-                    )
+                    is Resource.Success -> {
+                        it.copy(
+                            messages = result.data?.messages?.let { it1 -> saveMessagesToDB(it1) },
+                            users = result.data?.users?.let { it1 -> saveUsersToDB(it1) },
+                            isLoading = false
+                        )
+                    }
                 }
             }
         }.launchIn(viewModelScope)
     }
 
+    private suspend fun saveUsersToDB(users: List<User>): List<User> {
+        val updatedUsers = viewModelScope.async {
+            databasesRepository.insertAllUsers(users)
+            databasesRepository.getAllUsers()
+        }
+        return updatedUsers.await()
+    }
+
+    private suspend fun saveMessagesToDB(messages: List<Message>): List<Message> {
+        val updatedAttachments = viewModelScope.async {
+            databasesRepository.insertAllMessages(messages)
+            databasesRepository.getAllMessages()
+        }
+        return updatedAttachments.await()
+    }
+
+    private suspend fun saveMessageToDB(message: Message) {
+        databasesRepository.insertMessage(message)
+    }
+
     fun addNewTextMessage(message: String) {
-        val newMessageId = _state.value.messagesHistory?.size?.plus(1) ?: 1
+        val newMessageId = _state.value.messagesHistory?.maxBy { it.id }?.id?.plus(1) ?: 1
         val newMessage = Message(null, message, newMessageId, 2)
 
         val newList = _state.value.messagesHistory?.toMutableList()?.apply {
             add(newMessage)
         }
 
-        Log.d("MYAPP", "List Updated Add Message")
-
         _state.update {
             it.copy(
                 currentTextMessage = "",
                 messagesHistory = newList
             )
+        }
+
+        viewModelScope.launch {
+           saveMessageToDB(newMessage)
         }
     }
 
@@ -89,9 +117,7 @@ class MessagingViewModel @Inject constructor(
         val combinedMessages = mutableListOf<Message>()
         combinedMessages.addAll(myMessages ?: emptyList())
         combinedMessages.addAll(userMessages ?: emptyList())
-        combinedMessages.sortByDescending { it.id }
-
-        Log.d("MYAPP", "List Updated get combined")
+        combinedMessages.sortBy { it.id }
 
         _state.update {
             it.copy(

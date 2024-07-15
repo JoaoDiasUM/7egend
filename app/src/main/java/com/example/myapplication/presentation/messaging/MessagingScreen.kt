@@ -80,11 +80,13 @@ fun MessagingScreen(
                             it.userId == user.id
                         }
 
-                        UserItem(
-                            user = user,
-                            exampleMessage = exampleMessage?.content,
-                            navController = navController
-                        )
+                        if (user.name != "Ervin Howell") {
+                            UserItem(
+                                user = user,
+                                exampleMessage = exampleMessage?.content,
+                                navController = navController
+                            )
+                        }
                     }
                 }
             }
