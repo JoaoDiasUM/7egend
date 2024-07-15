@@ -9,5 +9,6 @@ data class MessagingScreenState(
     val users: List<User>? = null,
     val messagesHistory: List<Message>? = null,
     val currentTextMessage: String = "",
-    val error: String = ""
+    val error: String = "",
+    val popupUrl: String? = null
 )

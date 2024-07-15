@@ -59,7 +59,7 @@ fun UserChatScreen(
             ) {
                 state.value.messagesHistory?.forEach { message ->
                     item {
-                        UserMessageItem(message = message)
+                        UserMessageItem(message = message, viewModel = viewModel)
                     }
                 }
             }

@@ -60,6 +60,7 @@ class MessagingViewModel @Inject constructor(
 
         _state.update {
             it.copy(
+                currentTextMessage = "",
                 messagesHistory = newList
             )
         }
@@ -70,6 +71,14 @@ class MessagingViewModel @Inject constructor(
            it.copy(
                currentTextMessage = message
            )
+        }
+    }
+
+    fun updatePopupUrl(url: String) {
+        _state.update {
+            it.copy(
+                popupUrl = url
+            )
         }
     }
 

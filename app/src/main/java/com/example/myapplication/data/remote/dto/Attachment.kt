@@ -8,5 +8,6 @@ data class Attachment(
     @PrimaryKey val id: String,
     val thumbnailUrl: String,
     val title: String,
-    val url: String
+    val url: String,
+    val userId: String,
 )
