@@ -38,7 +38,6 @@ fun MessagingScreen(
     val userList = state.value.users
 
     Column(modifier = Modifier.fillMaxSize()) {
-
         Row(
             modifier = Modifier
                 .fillMaxWidth()

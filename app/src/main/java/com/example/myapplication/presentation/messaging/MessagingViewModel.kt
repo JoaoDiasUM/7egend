@@ -1,5 +1,6 @@
 package com.example.myapplication.presentation.messaging
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.myapplication.common.Constants.MY_ID
@@ -47,6 +48,22 @@ class MessagingViewModel @Inject constructor(
         }.launchIn(viewModelScope)
     }
 
+    fun addNewTextMessage(message: String) {
+        val newMessageId = _state.value.messagesHistory?.size?.plus(1) ?: 1
+        val newMessage = Message(null, message, newMessageId, 2)
+
+        val newList = _state.value.messagesHistory?.toMutableList()?.apply {
+            add(newMessage)
+        }
+
+        Log.d("MYAPP", "List Updated Add Message")
+
+        _state.update {
+            it.copy(
+                messagesHistory = newList
+            )
+        }
+    }
 
     fun updateCurrentTextMessageValue(message: String) {
         _state.update {
@@ -57,13 +74,15 @@ class MessagingViewModel @Inject constructor(
     }
 
     fun getMessagesHistoryByUser(userId: Int) {
-        val myMessages = state.value.messages?.filter { it.userId == MY_ID }
-        val userMessages = state.value.messages?.filter { it.userId == userId }
+        val myMessages = _state.value.messages?.filter { it.userId == MY_ID }
+        val userMessages = _state.value.messages?.filter { it.userId == userId }
 
         val combinedMessages = mutableListOf<Message>()
         combinedMessages.addAll(myMessages ?: emptyList())
         combinedMessages.addAll(userMessages ?: emptyList())
         combinedMessages.sortByDescending { it.id }
+
+        Log.d("MYAPP", "List Updated get combined")
 
         _state.update {
             it.copy(
