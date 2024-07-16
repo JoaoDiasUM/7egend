@@ -1,5 +1,8 @@
 package com.example.myapplication.feature_chat.presentation.chat
 
+import android.content.Context
+import android.media.AudioManager
+import android.view.SoundEffectConstants
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -36,6 +39,11 @@ fun UserChatScreen(
 
     val lazyListState = rememberLazyListState()
 
+    val context = LocalContext.current
+
+    val audioManager =
+        context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
+
     if(state.value.messagesHistory.isNullOrEmpty()){
         viewModel.getMessagesHistoryByUser(userId)
     }
@@ -70,7 +78,16 @@ fun UserChatScreen(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Image(
-                    modifier = Modifier.padding(8.dp, 0.dp, 0.dp, 0.dp),
+                    modifier = Modifier
+                        .padding(8.dp, 0.dp, 0.dp, 0.dp)
+                        .clickable {
+                            audioManager.playSoundEffect(AudioManager.FX_KEY_CLICK, 1.0f)
+                            state.value.currentTextMessage.let {
+                                viewModel.addNewMessageWithAttachment(
+                                    it
+                                )
+                            }
+                        },
                     painter = painterResource(id = R.drawable.baseline_attach_file_24),
                     contentDescription = stringResource(id = R.string.app_name),
                 )
@@ -87,6 +104,7 @@ fun UserChatScreen(
                     modifier = Modifier
                         .padding(8.dp, 0.dp, 0.dp, 0.dp)
                         .clickable {
+                            audioManager.playSoundEffect(AudioManager.FX_KEY_CLICK, 1.0f)
                             state.value.currentTextMessage.let {
                                 viewModel.addNewTextMessage(
                                     it

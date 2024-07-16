@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.myapplication.common.Constants.MY_ID
 import com.example.myapplication.common.Resource
+import com.example.myapplication.feature_chat.domain.model.Attachment
 import com.example.myapplication.feature_chat.domain.model.Message
 import com.example.myapplication.feature_chat.domain.model.User
 import com.example.myapplication.feature_chat.domain.repository.DatabaseRepository
@@ -40,6 +41,7 @@ class MessagingViewModel @Inject constructor(
                             error = result.message ?: "An unexpected error occurred",
                             isLoading = false
                         )
+
                     is Resource.Loading -> it.copy(isLoading = true)
                     is Resource.Success -> {
                         it.copy(
@@ -89,15 +91,42 @@ class MessagingViewModel @Inject constructor(
         }
 
         viewModelScope.launch {
-           saveMessageToDB(newMessage)
+            saveMessageToDB(newMessage)
+        }
+    }
+
+    // Simulate choosing an image to send to the chat
+    fun addNewMessageWithAttachment(message: String) {
+        val newMessageId = _state.value.messagesHistory?.maxBy { it.id }?.id?.plus(1) ?: 1
+        val attachment = Attachment(
+            newMessageId.toString(),
+            "https://picsum.photos/200/300",
+            "my image",
+            "https://picsum.photos/200/300"
+        )
+        val newMessage = Message(listOf(attachment), message, newMessageId, 2)
+
+        val newList = _state.value.messagesHistory?.toMutableList()?.apply {
+            add(newMessage)
+        }
+
+        _state.update {
+            it.copy(
+                currentTextMessage = "",
+                messagesHistory = newList
+            )
+        }
+
+        viewModelScope.launch {
+            saveMessageToDB(newMessage)
         }
     }
 
     fun updateCurrentTextMessageValue(message: String) {
         _state.update {
-           it.copy(
-               currentTextMessage = message
-           )
+            it.copy(
+                currentTextMessage = message
+            )
         }
     }
 

@@ -4,6 +4,7 @@ import app.cash.turbine.test
 import com.example.myapplication.CoroutineTestRule
 import com.example.myapplication.fakes.FakeDatabaseRepository
 import com.example.myapplication.fakes.FakeMessagingRepository
+import com.example.myapplication.feature_chat.domain.model.Attachment
 import com.example.myapplication.feature_chat.domain.model.Message
 import com.example.myapplication.feature_chat.domain.model.User
 import com.example.myapplication.feature_chat.domain.usecase.GetMessagingHistory
@@ -59,6 +60,35 @@ class MessageViewModelTest {
             sut.state.test {
                 awaitItem()
                 sut.addNewTextMessage("message")
+                assertEquals(
+                    awaitItem(),
+                    MessagingScreenState(
+                        currentTextMessage = "",
+                        messages = listOf(message),
+                        users = listOf(user),
+                        messagesHistory = listOf(message3,newMessage)
+                    )
+                )
+            }
+        }
+
+    @Test
+    fun `Add new text message with attachment`() =
+        runTest {
+            sut.state.value.messagesHistory = listOf(message3)
+
+            val attachment = Attachment(
+                "2",
+                "https://picsum.photos/200/300",
+                "my image",
+                "https://picsum.photos/200/300"
+            )
+
+            val newMessage = Message(listOf(attachment), "message", 2, 2)
+
+            sut.state.test {
+                awaitItem()
+                sut.addNewMessageWithAttachment("message")
                 assertEquals(
                     awaitItem(),
                     MessagingScreenState(

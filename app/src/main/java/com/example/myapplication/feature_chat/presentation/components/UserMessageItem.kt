@@ -25,6 +25,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
+import coil.request.CachePolicy
 import coil.request.ImageRequest
 import com.example.myapplication.R
 import com.example.myapplication.feature_chat.domain.model.Message
@@ -73,7 +74,11 @@ fun UserMessageItem(message: Message, viewModel: MessagingViewModel) {
                 AsyncImage(
                     model = ImageRequest.Builder(
                         LocalContext.current
-                    ).data(attachment.thumbnailUrl).crossfade(true).build(),
+                    )
+                        .data(attachment.thumbnailUrl)
+                        .crossfade(true)
+                        .diskCachePolicy(CachePolicy.ENABLED)
+                        .build(),
                     modifier = Modifier
                         .size(150.dp)
                         .padding(10.dp)
