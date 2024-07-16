@@ -24,7 +24,7 @@ S.O.L.I.D principles were also considered.
 For this purpose a single user, Erwin Howell, was chosen so all messages related to him are treated as our own, same with attachments.
 
 #### All the message attachments must be displayed.
-All attachment coming from the API request are shown firstly in a thumbnail form and then on a click shows the full size, this way they use less space unless need. <b>
+All attachment coming from the API request are shown firstly in a thumbnail form and then on a click shows the full size, this way they use less space unless need. <br>
 For this although I initially considered adding more kinds of attachment than the url's provided, i decided it would take too much time considering deadlines.
 
 ## Implementation Notes
