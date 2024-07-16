@@ -4,8 +4,8 @@
 
 ## Repository Description
 
-This repository was created with the aim to build a sample messaging app for the 7egend technicall challenge.
-This app was make with the goal to read, write and send messages with some additions.
+This repository was created with the aim to build a sample messaging app for the 7egend technical challenge.
+This app was made with the goal to read, write and send messages.
 
 ## Prompt description analysis
 
