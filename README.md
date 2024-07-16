@@ -2,8 +2,6 @@
 
 [Screen_recording_20240716_221650.webm](https://github.com/user-attachments/assets/4da3ee6e-d7c7-41f4-b342-c5a022a4ae3d)
 
-[Screen_recording_20240716_222059.webm](https://github.com/user-attachments/assets/06b0704f-ec3e-45b6-845b-1e010c40f7a9)
-
 ## Repository Description
 
 This repository was created with the aim to build a sample messaging app for the 7egend technical challenge.
