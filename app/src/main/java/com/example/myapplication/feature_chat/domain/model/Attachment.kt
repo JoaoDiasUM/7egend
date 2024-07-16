@@ -9,5 +9,4 @@ data class Attachment(
     val thumbnailUrl: String,
     val title: String,
     val url: String,
-    val userId: String,
 )

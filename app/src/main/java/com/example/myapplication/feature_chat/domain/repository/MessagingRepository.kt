@@ -4,5 +4,5 @@ import com.example.myapplication.feature_chat.domain.model.MessagingHistoryDto
 
 interface MessagingRepository {
 
-    suspend fun getMessages(): MessagingHistoryDto
+    suspend fun getMessages(): MessagingHistoryDto?
 }

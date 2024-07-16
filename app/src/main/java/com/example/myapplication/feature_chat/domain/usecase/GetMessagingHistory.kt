@@ -15,9 +15,12 @@ class GetMessagingHistory @Inject constructor(
 
     operator fun invoke(): Flow<Resource<MessagingHistoryDto>> = flow {
         try {
-            emit(Resource.Loading())
             val messages = messagingRepository.getMessages()
-            emit(Resource.Success(messages))
+            if (messages != null) {
+                emit(Resource.Success(messages))
+            } else {
+                emit(Resource.Error("No messages found"))
+            }
         } catch (e: HttpException) {
             emit(Resource.Error(e.localizedMessage ?: "An unexpected error happened"))
         } catch (e: IOException) {

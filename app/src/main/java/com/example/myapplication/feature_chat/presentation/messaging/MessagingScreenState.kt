@@ -5,9 +5,9 @@ import com.example.myapplication.feature_chat.domain.model.User
 
 data class MessagingScreenState(
     val isLoading: Boolean = false,
-    val messages: List<Message>? = null,
+    var messages: List<Message>? = null,
     val users: List<User>? = null,
-    val messagesHistory: List<Message>? = null,
+    var messagesHistory: List<Message>? = null,
     val currentTextMessage: String = "",
     val error: String = "",
     val popupUrl: String? = null

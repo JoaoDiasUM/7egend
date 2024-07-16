@@ -42,6 +42,7 @@ fun UserItem(navController: NavController, user: User, exampleMessage: String?) 
             }
     ) {
         Row {
+            // User images are not accessible, using replacement image for now
             AsyncImage(
                 model = ImageRequest.Builder(
                     LocalContext.current

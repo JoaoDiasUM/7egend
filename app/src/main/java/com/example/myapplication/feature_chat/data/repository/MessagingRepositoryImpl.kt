@@ -9,7 +9,13 @@ import javax.inject.Inject
 class MessagingRepositoryImpl @Inject constructor(
     private val messagingApiService: MessagingApiService
 ) : MessagingRepository {
-    override suspend fun getMessages(): MessagingHistoryDto {
-        return messagingApiService.getConversationHistory()
+    override suspend fun getMessages(): MessagingHistoryDto? {
+        val response = messagingApiService.getConversationHistory()
+
+        return if (response.isSuccessful) {
+            response.body()
+        } else {
+            null
+        }
     }
 }

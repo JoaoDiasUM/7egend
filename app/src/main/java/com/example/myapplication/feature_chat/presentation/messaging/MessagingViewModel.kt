@@ -4,9 +4,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.myapplication.common.Constants.MY_ID
 import com.example.myapplication.common.Resource
-import com.example.myapplication.feature_chat.data.repository.DatabasesRepositoryImpl
 import com.example.myapplication.feature_chat.domain.model.Message
 import com.example.myapplication.feature_chat.domain.model.User
+import com.example.myapplication.feature_chat.domain.repository.DatabaseRepository
 import com.example.myapplication.feature_chat.domain.usecase.GetMessagingHistory
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.async
@@ -21,7 +21,7 @@ import javax.inject.Inject
 @HiltViewModel
 class MessagingViewModel @Inject constructor(
     private val getMessagingHistory: GetMessagingHistory,
-    private val databasesRepositoryImpl: DatabasesRepositoryImpl,
+    private val databasesRepository: DatabaseRepository,
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(MessagingScreenState())
@@ -55,22 +55,22 @@ class MessagingViewModel @Inject constructor(
 
     private suspend fun saveUsersToDB(users: List<User>): List<User> {
         val updatedUsers = viewModelScope.async {
-            databasesRepositoryImpl.insertAllUsers(users)
-            databasesRepositoryImpl.getAllUsers()
+            databasesRepository.insertAllUsers(users)
+            databasesRepository.getAllUsers()
         }
         return updatedUsers.await()
     }
 
     private suspend fun saveMessagesToDB(messages: List<Message>): List<Message> {
         val updatedAttachments = viewModelScope.async {
-            databasesRepositoryImpl.insertAllMessages(messages)
-            databasesRepositoryImpl.getAllMessages()
+            databasesRepository.insertAllMessages(messages)
+            databasesRepository.getAllMessages()
         }
         return updatedAttachments.await()
     }
 
     private suspend fun saveMessageToDB(message: Message) {
-        databasesRepositoryImpl.insertMessage(message)
+        databasesRepository.insertMessage(message)
     }
 
     fun addNewTextMessage(message: String) {
