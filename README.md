@@ -36,10 +36,10 @@ To create what looks like a conversation i joined both messages from both my use
 Attachments sent by our user are simulated by creating an example attachment similar to existing ones.
 
 ## Limitations
-For the users, their avatar images are not able to be retrieved because the API endpoint shows as outdated.
+For the users, their avatar images are not able to be retrieved because the API endpoint shows as outdated. <br>
 For the attachments, sometimes the links for the images become unresponsive so only placeholders are shown.
 
 ## Considerations
-Considered the user actually adding attachments but it didnt feel it would work well with the data and the challenge time restraint.
-Considered a way to first generate a response message after a message was sent and then periodically send more to simulate a more realistic chatting experience.
+Considered the user actually adding attachments but it didnt feel it would work well with the data and the challenge time restraint.  <br>
+Considered a way to first generate a response message after a message was sent and then periodically send more to simulate a more realistic chatting experience.  <br>
 Considered adding a loading effect to some transitions.
