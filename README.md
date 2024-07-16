@@ -27,11 +27,11 @@ For this purpose a single user, Erwin Howell, was chosen so all messages related
 For this although I initially considered adding more kinds of attachment than the url's provided, i decided it would take too much time.
 
 ## Implementation Notes
-The app is separated into 3 principal packages of data, domain and presentation following the principles of clean architecture for single responsibility use cases, making the components more independent and easier to test.
-Also following MVVM principles in the presentation layer like the viewmodel acting like a bridge between the composable views and the models.
-The viewmodel makes use of mutable state flow to provide a reactive and efficient way of handling view interactions and updates.
-Since i wanted to create a messaging app i checked a few of them and tried to imitate the same style, since there are a lot of users i created a selection screen where i would choose who to chat with and then the chat itself with that person.
-To create what looks like a conversation i joined both messages from both my user and the selected user ordering them by an ID also so that my new messages would always show last, since we lack a data of when any given message was sent.
+The app is separated into 3 principal packages of data, domain and presentation following the principles of clean architecture for single responsibility use cases, making the components more independent and easier to test. <br>
+Also following MVVM principles in the presentation layer like the viewmodel acting like a bridge between the composable views and the models. <br>
+The viewmodel makes use of mutable state flow to provide a reactive and efficient way of handling view interactions and updates. <br>
+Since i wanted to create a messaging app i checked a few of them and tried to imitate the same style, since there are a lot of users i created a selection screen where i would choose who to chat with and then the chat itself with that person. <br>
+To create what looks like a conversation i joined both messages from both my user and the selected user ordering them by an ID also so that my new messages would always show last, since we lack a data of when any given message was sent. <br>
 Attachments sent by our user are simulated by creating an example attachment similar to existing ones.
 
 ## Limitations
