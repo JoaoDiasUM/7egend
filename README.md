@@ -36,3 +36,4 @@ For the attachments, sometimes the links for the images become unresponsive so o
 ## Considerations
 Considered the user actually adding attachments but it didnt feel it would work well with the data and the challenge time restraint.
 Considered a way to first generate a response message after a message was sent and then periodically send more to simulate a more realistic chatting experience.
+Considered adding a loading effect to some transitions.
