@@ -1,4 +1,4 @@
-# 7egend
+# 7egend Tech Challenge
 
 [Screen_recording_20240716_221650.webm](https://github.com/user-attachments/assets/4da3ee6e-d7c7-41f4-b342-c5a022a4ae3d)
 
