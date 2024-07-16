@@ -1,8 +1,8 @@
 package com.example.myapplication.di
 
-import com.example.myapplication.data.remote.MessagingApiService
-import com.example.myapplication.data.repository.MessagingRepositoryImpl
-import com.example.myapplication.domain.repository.MessagingRepository
+import com.example.myapplication.feature_chat.data.remote.MessagingApiService
+import com.example.myapplication.feature_chat.data.repository.MessagingRepositoryImpl
+import com.example.myapplication.feature_chat.domain.repository.MessagingRepository
 import dagger.Binds
 import dagger.Module
 import dagger.Provides

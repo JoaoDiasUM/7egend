@@ -2,10 +2,18 @@ package com.example.myapplication.di
 
 import android.content.Context
 import androidx.room.Room
-import com.example.myapplication.data.room.dao.MessageDao
-import com.example.myapplication.data.room.dao.UserDao
-import com.example.myapplication.data.room.database.MessageDatabase
-import com.example.myapplication.data.room.database.UserDatabase
+import com.example.myapplication.feature_chat.data.repository.DatabasesRepositoryImpl
+import com.example.myapplication.feature_chat.data.room.dao.MessageDao
+import com.example.myapplication.feature_chat.data.room.dao.UserDao
+import com.example.myapplication.feature_chat.data.room.database.MessageDatabase
+import com.example.myapplication.feature_chat.data.room.database.UserDatabase
+import com.example.myapplication.feature_chat.domain.repository.DatabaseRepository
+import com.example.myapplication.feature_chat.domain.usecase.ChatUseCases
+import com.example.myapplication.feature_chat.domain.usecase.GetAllMessages
+import com.example.myapplication.feature_chat.domain.usecase.GetAllUsers
+import com.example.myapplication.feature_chat.domain.usecase.InsertAllMessages
+import com.example.myapplication.feature_chat.domain.usecase.InsertAllUsers
+import com.example.myapplication.feature_chat.domain.usecase.InsertMessage
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -46,5 +54,23 @@ object DatabaseModule {
     @Singleton
     fun provideMessageDao(messageDatabase: MessageDatabase): MessageDao {
         return messageDatabase.messageDao()
+    }
+
+    @Provides
+    @Singleton
+    fun provideDatabaseRepository(userDB: UserDatabase, messageDB: MessageDatabase): DatabaseRepository {
+        return DatabasesRepositoryImpl(userDB.userDao(),messageDB.messageDao())
+    }
+
+    @Provides
+    @Singleton
+    fun provideChatUseCases(databaseRepository: DatabaseRepository): ChatUseCases {
+        return ChatUseCases(
+            insertAllUsers = InsertAllUsers(databaseRepository),
+            getAllUsers = GetAllUsers(databaseRepository),
+            getAllMessages = GetAllMessages(databaseRepository),
+            insertMessage = InsertMessage(databaseRepository),
+            insertAllMessages = InsertAllMessages(databaseRepository)
+        )
     }
 }
