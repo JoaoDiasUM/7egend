@@ -11,10 +11,11 @@ This app was made with the goal to read, write and send messages.
 
 #### All the messages and users info need to be loaded when the app’s launched and locally stored.
 For this I considered Room or Realm DB and considered when and how should the contents be stored.
-Messages should be updated every time the app is opened in case there are new messages coming from the API and updated when an user send or would receive a message but should take care to only do the DB operations when needed and in the most efficient way.
+Messages should be updated every time the app is opened in case there are new messages coming from the API and updated when an user sends or would receive a new message but should take care to only do DB operations when needed and in the most efficient way.
 
 #### You can use any third party libraries or frameworks, as long as you can properly justify why you’re using them.
-I considered using a library that would help with creating a chat but i both found that a lot of them are paid kits and that i wanted to try my more direct approach to it. For third party libraries i used some like Turbine to facilitate some processes like in testing kotlin Flows.
+I considered using a library that would help with creating a chat but i found that a lot of them are paid kits and that i wanted to try my more direct approach to it. <br>
+For third party libraries i used some like Turbine to facilitate some processes like in testing kotlin Flows.
 
 #### We recommend you to use the MVP or MVVM architecture, but feel free to use the architecture you feel more comfortable with.
 The architecture used was MMVM and Clean architectures to best separate business and UI logic while being more modular, reusable and easier to maintain.
@@ -25,7 +26,7 @@ For this purpose a single user, Erwin Howell, was chosen so all messages related
 
 #### All the message attachments must be displayed.
 All attachment coming from the API request are shown firstly in a thumbnail form and then on a click shows the full size, this way they use less space unless need. <br>
-For this although I initially considered adding more kinds of attachment than the url's provided, i decided it would take too much time considering deadlines.
+For this although I initially considered adding more kinds of attachment than the url's provided, but i decided it would take too much time considering deadlines.
 
 ## Implementation Notes
 The app is separated into 3 principal packages of data, domain and presentation following the principles of clean architecture for single responsibility use cases, making the components more independent and easier to test. <br>
